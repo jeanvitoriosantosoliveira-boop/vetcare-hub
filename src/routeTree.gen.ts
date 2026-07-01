@@ -9,38 +9,207 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PTokenRouteImport } from './routes/p.$token'
+import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
+import { Route as AuthenticatedClinicaRouteImport } from './routes/_authenticated/clinica'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authenticated/tutor.index'
+import { Route as AuthenticatedTutorPetsRouteImport } from './routes/_authenticated/tutor.pets'
+import { Route as AuthenticatedTutorAgendarRouteImport } from './routes/_authenticated/tutor.agendar'
+import { Route as AuthenticatedTutorPetsNovoRouteImport } from './routes/_authenticated/tutor.pets.novo'
+import { Route as AuthenticatedTutorPetsPetIdRouteImport } from './routes/_authenticated/tutor.pets.$petId'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PTokenRoute = PTokenRouteImport.update({
+  id: '/p/$token',
+  path: '/p/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
+  id: '/tutor',
+  path: '/tutor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedClinicaRoute = AuthenticatedClinicaRouteImport.update({
+  id: '/clinica',
+  path: '/clinica',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTutorIndexRoute = AuthenticatedTutorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedTutorRoute,
+} as any)
+const AuthenticatedTutorPetsRoute = AuthenticatedTutorPetsRouteImport.update({
+  id: '/pets',
+  path: '/pets',
+  getParentRoute: () => AuthenticatedTutorRoute,
+} as any)
+const AuthenticatedTutorAgendarRoute =
+  AuthenticatedTutorAgendarRouteImport.update({
+    id: '/agendar',
+    path: '/agendar',
+    getParentRoute: () => AuthenticatedTutorRoute,
+  } as any)
+const AuthenticatedTutorPetsNovoRoute =
+  AuthenticatedTutorPetsNovoRouteImport.update({
+    id: '/novo',
+    path: '/novo',
+    getParentRoute: () => AuthenticatedTutorPetsRoute,
+  } as any)
+const AuthenticatedTutorPetsPetIdRoute =
+  AuthenticatedTutorPetsPetIdRouteImport.update({
+    id: '/$petId',
+    path: '/$petId',
+    getParentRoute: () => AuthenticatedTutorPetsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/clinica': typeof AuthenticatedClinicaRoute
+  '/tutor': typeof AuthenticatedTutorRouteWithChildren
+  '/p/$token': typeof PTokenRoute
+  '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
+  '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
+  '/tutor/': typeof AuthenticatedTutorIndexRoute
+  '/tutor/pets/$petId': typeof AuthenticatedTutorPetsPetIdRoute
+  '/tutor/pets/novo': typeof AuthenticatedTutorPetsNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/clinica': typeof AuthenticatedClinicaRoute
+  '/p/$token': typeof PTokenRoute
+  '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
+  '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
+  '/tutor': typeof AuthenticatedTutorIndexRoute
+  '/tutor/pets/$petId': typeof AuthenticatedTutorPetsPetIdRoute
+  '/tutor/pets/novo': typeof AuthenticatedTutorPetsNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/clinica': typeof AuthenticatedClinicaRoute
+  '/_authenticated/tutor': typeof AuthenticatedTutorRouteWithChildren
+  '/p/$token': typeof PTokenRoute
+  '/_authenticated/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
+  '/_authenticated/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
+  '/_authenticated/tutor/': typeof AuthenticatedTutorIndexRoute
+  '/_authenticated/tutor/pets/$petId': typeof AuthenticatedTutorPetsPetIdRoute
+  '/_authenticated/tutor/pets/novo': typeof AuthenticatedTutorPetsNovoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/sitemap.xml'
+    | '/admin'
+    | '/clinica'
+    | '/tutor'
+    | '/p/$token'
+    | '/tutor/agendar'
+    | '/tutor/pets'
+    | '/tutor/'
+    | '/tutor/pets/$petId'
+    | '/tutor/pets/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/sitemap.xml'
+    | '/admin'
+    | '/clinica'
+    | '/p/$token'
+    | '/tutor/agendar'
+    | '/tutor/pets'
+    | '/tutor'
+    | '/tutor/pets/$petId'
+    | '/tutor/pets/novo'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/sitemap.xml'
+    | '/_authenticated/admin'
+    | '/_authenticated/clinica'
+    | '/_authenticated/tutor'
+    | '/p/$token'
+    | '/_authenticated/tutor/agendar'
+    | '/_authenticated/tutor/pets'
+    | '/_authenticated/tutor/'
+    | '/_authenticated/tutor/pets/$petId'
+    | '/_authenticated/tutor/pets/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  PTokenRoute: typeof PTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +217,125 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/p/$token': {
+      id: '/p/$token'
+      path: '/p/$token'
+      fullPath: '/p/$token'
+      preLoaderRoute: typeof PTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/tutor': {
+      id: '/_authenticated/tutor'
+      path: '/tutor'
+      fullPath: '/tutor'
+      preLoaderRoute: typeof AuthenticatedTutorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/clinica': {
+      id: '/_authenticated/clinica'
+      path: '/clinica'
+      fullPath: '/clinica'
+      preLoaderRoute: typeof AuthenticatedClinicaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tutor/': {
+      id: '/_authenticated/tutor/'
+      path: '/'
+      fullPath: '/tutor/'
+      preLoaderRoute: typeof AuthenticatedTutorIndexRouteImport
+      parentRoute: typeof AuthenticatedTutorRoute
+    }
+    '/_authenticated/tutor/pets': {
+      id: '/_authenticated/tutor/pets'
+      path: '/pets'
+      fullPath: '/tutor/pets'
+      preLoaderRoute: typeof AuthenticatedTutorPetsRouteImport
+      parentRoute: typeof AuthenticatedTutorRoute
+    }
+    '/_authenticated/tutor/agendar': {
+      id: '/_authenticated/tutor/agendar'
+      path: '/agendar'
+      fullPath: '/tutor/agendar'
+      preLoaderRoute: typeof AuthenticatedTutorAgendarRouteImport
+      parentRoute: typeof AuthenticatedTutorRoute
+    }
+    '/_authenticated/tutor/pets/novo': {
+      id: '/_authenticated/tutor/pets/novo'
+      path: '/novo'
+      fullPath: '/tutor/pets/novo'
+      preLoaderRoute: typeof AuthenticatedTutorPetsNovoRouteImport
+      parentRoute: typeof AuthenticatedTutorPetsRoute
+    }
+    '/_authenticated/tutor/pets/$petId': {
+      id: '/_authenticated/tutor/pets/$petId'
+      path: '/$petId'
+      fullPath: '/tutor/pets/$petId'
+      preLoaderRoute: typeof AuthenticatedTutorPetsPetIdRouteImport
+      parentRoute: typeof AuthenticatedTutorPetsRoute
+    }
   }
 }
 
+interface AuthenticatedTutorPetsRouteChildren {
+  AuthenticatedTutorPetsPetIdRoute: typeof AuthenticatedTutorPetsPetIdRoute
+  AuthenticatedTutorPetsNovoRoute: typeof AuthenticatedTutorPetsNovoRoute
+}
+
+const AuthenticatedTutorPetsRouteChildren: AuthenticatedTutorPetsRouteChildren =
+  {
+    AuthenticatedTutorPetsPetIdRoute: AuthenticatedTutorPetsPetIdRoute,
+    AuthenticatedTutorPetsNovoRoute: AuthenticatedTutorPetsNovoRoute,
+  }
+
+const AuthenticatedTutorPetsRouteWithChildren =
+  AuthenticatedTutorPetsRoute._addFileChildren(
+    AuthenticatedTutorPetsRouteChildren,
+  )
+
+interface AuthenticatedTutorRouteChildren {
+  AuthenticatedTutorAgendarRoute: typeof AuthenticatedTutorAgendarRoute
+  AuthenticatedTutorPetsRoute: typeof AuthenticatedTutorPetsRouteWithChildren
+  AuthenticatedTutorIndexRoute: typeof AuthenticatedTutorIndexRoute
+}
+
+const AuthenticatedTutorRouteChildren: AuthenticatedTutorRouteChildren = {
+  AuthenticatedTutorAgendarRoute: AuthenticatedTutorAgendarRoute,
+  AuthenticatedTutorPetsRoute: AuthenticatedTutorPetsRouteWithChildren,
+  AuthenticatedTutorIndexRoute: AuthenticatedTutorIndexRoute,
+}
+
+const AuthenticatedTutorRouteWithChildren =
+  AuthenticatedTutorRoute._addFileChildren(AuthenticatedTutorRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedClinicaRoute: typeof AuthenticatedClinicaRoute
+  AuthenticatedTutorRoute: typeof AuthenticatedTutorRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedClinicaRoute: AuthenticatedClinicaRoute,
+  AuthenticatedTutorRoute: AuthenticatedTutorRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  PTokenRoute: PTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
