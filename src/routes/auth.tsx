@@ -102,7 +102,7 @@ function AuthPage() {
         <div className="relative text-center text-white max-w-md">
           <img src={heroImg} alt="" className="w-72 mx-auto mb-6 rounded-2xl bg-white/90 p-4" />
           <h2 className="text-3xl font-black">A saúde dos pets em um só lugar.</h2>
-          <p className="mt-3 text-white/90">Sistema completo para clínicas veterinárias — agenda, prontuário, vacinas e carteirinha digital.</p>
+          <p className="mt-3 text-white/90">Sistema completo para clínicas veterinárias agenda, prontuário, vacinas carteirinha digital e muito mais!</p>
         </div>
       </div>
     </div>

@@ -70,7 +70,7 @@ function Landing() {
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-xl">
               Agenda no WhatsApp, prontuário em papel, tutor sem retorno de vacina. Toda semana isso custa clientes que não voltam.
-              O <b>JVet</b> resolve isso com <b>um único sistema</b> — pago uma vez, sem mensalidade de SaaS.
+              O <b>JVet</b> resolve isso com <b>um único sistema</b> pago uma vez, sem mensalidade de SaaS.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <CTAWhats>Quero adquirir o sistema</CTAWhats>
@@ -99,7 +99,7 @@ function Landing() {
           <PainCard icon="event_busy" title="Agenda vive no WhatsApp"
             text="Cliente marca, recepção esquece, veterinário atende sem saber. Overbooking e horários vazios convivem na mesma semana." />
           <PainCard icon="description" title="Prontuário em papel ou planilha"
-            text="O histórico do pet some quando o vet muda. Alergias, cirurgias e medicações são refeitas do zero — risco clínico e retrabalho." />
+            text="O histórico do pet some quando o vet muda. Alergias, cirurgias e medicações são refeitas do zero risco clínico e retrabalho." />
           <PainCard icon="notifications_off" title="Tutor não é lembrado da vacina"
             text="Sem alerta automático, o pet perde reforço, o cliente perde confiança e a clínica perde a receita recorrente." />
         </div>
@@ -128,7 +128,7 @@ function Landing() {
       <section id="features" className="max-w-6xl mx-auto px-6 py-20">
         <div className="text-center max-w-2xl mx-auto">
           <div className="text-primary text-sm font-bold tracking-widest uppercase">Recursos</div>
-          <h2 className="mt-3 text-3xl md:text-4xl font-black">Tudo o que uma clínica moderna precisa — sem plugin nem gambiarra.</h2>
+          <h2 className="mt-3 text-3xl md:text-4xl font-black">Tudo o que uma clínica moderna precisa sem plugin nem gambiarra.</h2>
         </div>
         <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -213,7 +213,7 @@ function Landing() {
         </div>
         <div className="mt-10 space-y-3">
           <Faq q="Como é o pagamento? Tem mensalidade?"
-            a="Você paga uma vez pela aquisição do sistema. Depois, só paga a mensalidade do banco de dados e do suporte — sem contrato de refém, sem multa." />
+            a="Você paga uma vez pela aquisição do sistema. Depois, só paga a mensalidade do banco de dados e do suporte sem contrato de refém, sem multa." />
           <Faq q="Os dados são meus?"
             a="Sim. Cada clínica opera num ambiente isolado (Row Level Security). Você pode exportar tudo a qualquer momento." />
           <Faq q="Preciso de servidor?"
@@ -223,7 +223,7 @@ function Landing() {
           <Faq q="Consigo cadastrar meus clientes atuais?"
             a="Sim. Fazemos importação inicial de tutores e pets no onboarding." />
           <Faq q="E se eu pausar a clínica um mês?"
-            a="O admin pausa a clínica com 1 clique — todos os acessos ficam suspensos automaticamente e reativam quando você quiser." />
+            a="O admin pausa a clínica com 1 clique todos os acessos ficam suspensos automaticamente e reativam quando você quiser." />
         </div>
       </section>
 
@@ -254,7 +254,7 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-jvet grid place-items-center text-white font-black text-xs">J</div>
-            <span>© {new Date().getFullYear()} JVet — Sistema para clínicas veterinárias</span>
+            <span>© {new Date().getFullYear()} JVet Sistema para clínicas veterinárias</span>
           </div>
           <a href={WHATS} target="_blank" rel="noreferrer" className="hover:text-primary">Comercial: (46) 99116-3405</a>
         </div>
