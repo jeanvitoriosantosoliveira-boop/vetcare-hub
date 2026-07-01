@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/tutor/pets/novo")({
   component: NewPet,
@@ -16,21 +17,37 @@ function NewPet() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    name: "", species: "cao", breed: "", sex: "", birth_date: "", weight_kg: "", color: "", microchip: "",
+    name: "", species: "dog" as "dog"|"cat"|"bird"|"rodent"|"reptile"|"other",
+    breed: "", sex: "unknown" as "male"|"female"|"unknown", birth_date: "", weight_kg: "", color: "", microchip: "",
+  });
+
+  const { data: primaryClinic } = useQuery({
+    queryKey: ["my-primary-clinic"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      const { data } = await supabase.from("profiles").select("primary_clinic_id, clinics:primary_clinic_id(id, name)").eq("id", user.id).maybeSingle();
+      return data;
+    },
   });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!primaryClinic?.primary_clinic_id) {
+      toast.error("Você ainda não está vinculado a uma clínica. Peça à sua clínica para criar seu cadastro.");
+      return;
+    }
     setLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Sessão expirada");
       const { error } = await supabase.from("pets").insert({
         tutor_id: user.id,
+        clinic_id: primaryClinic.primary_clinic_id,
         name: form.name,
-        species: form.species as "cao" | "gato" | "ave" | "roedor" | "reptil" | "outro",
+        species: form.species,
         breed: form.breed || null,
-        sex: (form.sex || null) as "macho" | "femea" | null,
+        sex: form.sex,
         birth_date: form.birth_date || null,
         weight_kg: form.weight_kg ? Number(form.weight_kg) : null,
         color: form.color || null,
@@ -49,6 +66,11 @@ function NewPet() {
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-3xl font-black mb-6">Cadastrar pet</h1>
+      {!primaryClinic?.primary_clinic_id && (
+        <Card className="p-4 mb-4 border-warning/40 bg-warning/5 text-sm">
+          Você ainda não está vinculado a uma clínica. Peça à recepção da clínica para criar seu cadastro — os pets ficam ligados a ela. <Link to="/tutor" className="underline">Voltar</Link>
+        </Card>
+      )}
       <Card className="p-6 elevation-1">
         <form onSubmit={submit} className="grid md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
@@ -57,15 +79,15 @@ function NewPet() {
           </div>
           <div>
             <Label>Espécie *</Label>
-            <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
+            <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v as typeof form.species })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="cao">Cão</SelectItem>
-                <SelectItem value="gato">Gato</SelectItem>
-                <SelectItem value="ave">Ave</SelectItem>
-                <SelectItem value="roedor">Roedor</SelectItem>
-                <SelectItem value="reptil">Réptil</SelectItem>
-                <SelectItem value="outro">Outro</SelectItem>
+                <SelectItem value="dog">Cão</SelectItem>
+                <SelectItem value="cat">Gato</SelectItem>
+                <SelectItem value="bird">Ave</SelectItem>
+                <SelectItem value="rodent">Roedor</SelectItem>
+                <SelectItem value="reptile">Réptil</SelectItem>
+                <SelectItem value="other">Outro</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -75,11 +97,12 @@ function NewPet() {
           </div>
           <div>
             <Label>Sexo</Label>
-            <Select value={form.sex} onValueChange={(v) => setForm({ ...form, sex: v })}>
+            <Select value={form.sex} onValueChange={(v) => setForm({ ...form, sex: v as typeof form.sex })}>
               <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="macho">Macho</SelectItem>
-                <SelectItem value="femea">Fêmea</SelectItem>
+                <SelectItem value="male">Macho</SelectItem>
+                <SelectItem value="female">Fêmea</SelectItem>
+                <SelectItem value="unknown">Não informado</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -18,7 +18,7 @@ function Agendar() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
-    pet_id: "", clinic_id: "", appointment_type: "consulta", scheduled_at: "", notes: "",
+    pet_id: "", clinic_id: "", service_id: "", scheduled_at: "", notes: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -27,15 +27,28 @@ function Agendar() {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
-      const { data } = await supabase.from("pets").select("id, name, species").eq("tutor_id", user.id);
+      const { data } = await supabase.from("pets").select("id, name, species, clinic_id").eq("tutor_id", user.id);
       return data ?? [];
     },
   });
 
-  const { data: clinics } = useQuery({
-    queryKey: ["clinics-public"],
+  const selectedPet = pets?.find((p) => p.id === form.pet_id);
+  const clinicId = selectedPet?.clinic_id || "";
+
+  const { data: clinic } = useQuery({
+    queryKey: ["clinic", clinicId],
+    enabled: !!clinicId,
     queryFn: async () => {
-      const { data } = await supabase.from("clinics").select("id, name").eq("status", "ativa").limit(50);
+      const { data } = await supabase.from("clinics").select("id, name").eq("id", clinicId).maybeSingle();
+      return data;
+    },
+  });
+
+  const { data: services } = useQuery({
+    queryKey: ["services", clinicId],
+    enabled: !!clinicId,
+    queryFn: async () => {
+      const { data } = await supabase.from("services").select("id, name, duration_min").eq("clinic_id", clinicId).eq("active", true);
       return data ?? [];
     },
   });
@@ -45,15 +58,15 @@ function Agendar() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Sessão expirada");
-      if (!form.clinic_id) throw new Error("Selecione uma clínica");
+      if (!clinicId) throw new Error("Selecione um pet");
       const { error } = await supabase.from("appointments").insert({
-        clinic_id: form.clinic_id,
+        clinic_id: clinicId,
         pet_id: form.pet_id,
         tutor_id: user.id,
-        appointment_type: form.appointment_type as "consulta"|"retorno"|"banho_tosa"|"vacinacao"|"emergencia",
+        service_id: form.service_id || null,
         scheduled_at: new Date(form.scheduled_at).toISOString(),
         notes: form.notes || null,
-        status: "pendente",
+        status: "scheduled",
       });
       if (error) throw error;
       toast.success("Agendamento solicitado!");
@@ -92,30 +105,17 @@ function Agendar() {
         {step === 2 && (
           <div>
             <Label>Tipo de serviço</Label>
-            <Select value={form.appointment_type} onValueChange={(v) => setForm({ ...form, appointment_type: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+            <Select value={form.service_id} onValueChange={(v) => setForm({ ...form, service_id: v })}>
+              <SelectTrigger><SelectValue placeholder={services?.length ? "Selecione" : "Nenhum serviço cadastrado"} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="consulta">Consulta</SelectItem>
-                <SelectItem value="retorno">Retorno</SelectItem>
-                <SelectItem value="vacinacao">Vacinação</SelectItem>
-                <SelectItem value="banho_tosa">Banho e Tosa</SelectItem>
-                <SelectItem value="emergencia">Emergência</SelectItem>
+                {services?.map((s) => <SelectItem key={s.id} value={s.id}>{s.name} ({s.duration_min}min)</SelectItem>)}
               </SelectContent>
             </Select>
+            <p className="text-xs text-muted-foreground mt-2">Clínica: <b>{clinic?.name || "-"}</b></p>
           </div>
         )}
         {step === 3 && (
           <div className="space-y-3">
-            <div>
-              <Label>Clínica</Label>
-              <Select value={form.clinic_id} onValueChange={(v) => setForm({ ...form, clinic_id: v })}>
-                <SelectTrigger><SelectValue placeholder="Selecione uma clínica" /></SelectTrigger>
-                <SelectContent>
-                  {clinics?.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                </SelectContent>
-              </Select>
-              {clinics && clinics.length === 0 && <p className="text-xs text-muted-foreground mt-1">Nenhuma clínica disponível ainda.</p>}
-            </div>
             <div>
               <Label>Data e horário</Label>
               <Input type="datetime-local" value={form.scheduled_at} onChange={(e) => setForm({ ...form, scheduled_at: e.target.value })} />
@@ -131,8 +131,8 @@ function Agendar() {
             <Card className="p-4 bg-muted/50">
               <div className="text-sm space-y-1">
                 <div><b>Pet:</b> {pets?.find(p => p.id === form.pet_id)?.name}</div>
-                <div><b>Serviço:</b> {form.appointment_type}</div>
-                <div><b>Clínica:</b> {clinics?.find(c => c.id === form.clinic_id)?.name}</div>
+                <div><b>Serviço:</b> {services?.find(s => s.id === form.service_id)?.name || "-"}</div>
+                <div><b>Clínica:</b> {clinic?.name || "-"}</div>
                 <div><b>Quando:</b> {form.scheduled_at && new Date(form.scheduled_at).toLocaleString("pt-BR")}</div>
               </div>
             </Card>
@@ -143,7 +143,7 @@ function Agendar() {
           <Button variant="ghost" onClick={() => setStep(Math.max(1, step - 1))} disabled={step === 1}>Voltar</Button>
           {step < 4 ? (
             <Button className="rounded-full" onClick={() => setStep(step + 1)}
-              disabled={(step === 1 && !form.pet_id) || (step === 3 && (!form.clinic_id || !form.scheduled_at))}>
+              disabled={(step === 1 && !form.pet_id) || (step === 3 && !form.scheduled_at)}>
               Próximo
             </Button>
           ) : (

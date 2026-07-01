@@ -20,8 +20,8 @@ function PetProfile() {
       const [pet, vaccines, appointments, records] = await Promise.all([
         supabase.from("pets").select("*").eq("id", petId).maybeSingle(),
         supabase.from("vaccines").select("*").eq("pet_id", petId).order("applied_at", { ascending: false }),
-        supabase.from("appointments").select("id, scheduled_at, appointment_type, status, clinic_id").eq("pet_id", petId).order("scheduled_at", { ascending: false }),
-        supabase.from("medical_records").select("id, created_at, tutor_summary, diagnosis").eq("pet_id", petId).order("created_at", { ascending: false }),
+        supabase.from("appointments").select("id, scheduled_at, status, clinic_id, services(name)").eq("pet_id", petId).order("scheduled_at", { ascending: false }),
+        supabase.from("medical_records").select("id, created_at, diagnosis").eq("pet_id", petId).order("created_at", { ascending: false }),
       ]);
       return { pet: pet.data, vaccines: vaccines.data ?? [], appointments: appointments.data ?? [], records: records.data ?? [] };
     },
@@ -31,7 +31,7 @@ function PetProfile() {
   if (!data?.pet) return <div>Pet não encontrado</div>;
   const pet = data.pet;
   const age = pet.birth_date ? Math.floor(differenceInDays(new Date(), parseISO(pet.birth_date)) / 365) : null;
-  const qrUrl = typeof window !== "undefined" ? `${window.location.origin}/p/${pet.qr_token}` : "";
+  const qrUrl = typeof window !== "undefined" ? `${window.location.origin}/p/${pet.public_token}` : "";
 
   return (
     <div className="space-y-6">
@@ -131,16 +131,19 @@ function PetProfile() {
             <Card className="p-10 text-center border-dashed">Nenhuma consulta ainda.</Card>
           ) : (
             <div className="space-y-2">
-              {data.appointments.map((a) => (
+              {data.appointments.map((a) => {
+                const svc = Array.isArray(a.services) ? a.services[0]?.name : (a.services as { name?: string } | null)?.name;
+                return (
                 <Card key={a.id} className="p-4 flex items-center gap-4">
                   <span className="material-symbols-rounded text-primary">event</span>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold capitalize">{a.appointment_type.replace("_"," ")}</div>
+                    <div className="font-semibold capitalize">{svc || "Consulta"}</div>
                     <div className="text-xs text-muted-foreground mono">{format(parseISO(a.scheduled_at), "d MMM yyyy 'às' HH:mm", { locale: ptBR })}</div>
                   </div>
                   <span className="text-xs capitalize">{a.status.replace("_"," ")}</span>
                 </Card>
-              ))}
+                );
+              })}
             </div>
           )}
         </TabsContent>
