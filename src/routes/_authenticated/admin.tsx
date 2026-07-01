@@ -183,11 +183,37 @@ function ClinicUsersDialog({ clinicId, clinicName }: { clinicId: string; clinicN
   async function createUser(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+
+    if (!token) {
+      toast.error("Sua sessão expirou. Faça login novamente.");
+      setSaving(false);
+      return;
+    }
+
     const { error } = await supabase.functions.invoke("admin-create-user", {
       body: { ...f, clinic_id: clinicId },
+      headers: { Authorization: `Bearer ${token}` },
     });
+
     setSaving(false);
-    if (error) return toast.error(error.message);
+
+    if (error) {
+      const ctx = (error as any).context;
+      let detail = error.message;
+      try {
+        const errBody = await ctx.json();
+        detail = errBody.error ?? detail;
+      } catch {
+        // corpo não veio em JSON, mantém a mensagem padrão
+      }
+      console.error("admin-create-user error:", detail);
+      toast.error(detail);
+      return;
+    }
+
     toast.success("Usuário criado");
     setF({ email:"",password:"",full_name:"",role:"clinic_admin" });
     qc.invalidateQueries({ queryKey: ["admin","clinic-staff",clinicId] });
