@@ -13,7 +13,7 @@ function PublicPet() {
   const { data, isLoading } = useQuery({
     queryKey: ["public-pet", token],
     queryFn: async () => {
-      const { data } = await supabase.from("pets").select("name, species, breed, sex, birth_date, photo_url").eq("qr_token", token).maybeSingle();
+      const { data } = await supabase.from("pets").select("name, species, breed, sex, birth_date, photo_url").eq("public_token", token).maybeSingle();
       return data;
     },
   });

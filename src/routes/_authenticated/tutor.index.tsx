@@ -19,7 +19,7 @@ function TutorHome() {
       const [profile, pets, appts, vaccines] = await Promise.all([
         supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
         supabase.from("pets").select("id, name, species, photo_url, breed").eq("tutor_id", user.id),
-        supabase.from("appointments").select("id, scheduled_at, appointment_type, status, pet_id, clinic_id").eq("tutor_id", user.id).gte("scheduled_at", new Date().toISOString()).order("scheduled_at").limit(3),
+        supabase.from("appointments").select("id, scheduled_at, status, pet_id, clinic_id, services(name)").eq("tutor_id", user.id).gte("scheduled_at", new Date().toISOString()).order("scheduled_at").limit(3),
         supabase.from("vaccines").select("id, vaccine_name, next_dose_at, pet_id").not("next_dose_at", "is", null),
       ]);
       return { profile: profile.data, pets: pets.data ?? [], appts: appts.data ?? [], vaccines: vaccines.data ?? [] };
@@ -79,18 +79,21 @@ function TutorHome() {
           <EmptyState title="Nenhum agendamento" description="Marque uma consulta para o seu pet." icon="event_available" action={<Button asChild className="rounded-full"><Link to="/tutor/agendar">Agendar consulta</Link></Button>} />
         ) : (
           <div className="space-y-2">
-            {data?.appts.map((a) => (
+            {data?.appts.map((a) => {
+              const svc = Array.isArray(a.services) ? a.services[0]?.name : (a.services as { name?: string } | null)?.name;
+              return (
               <Card key={a.id} className="p-4 flex items-center gap-4 card-hover">
                 <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary grid place-items-center">
                   <span className="material-symbols-rounded">event</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold capitalize">{a.appointment_type.replace("_", " ")}</div>
+                  <div className="font-semibold capitalize">{svc || "Consulta"}</div>
                   <div className="text-sm text-muted-foreground mono">{format(parseISO(a.scheduled_at), "d MMM yyyy 'às' HH:mm", { locale: ptBR })}</div>
                 </div>
                 <StatusBadge status={a.status} />
               </Card>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
@@ -100,13 +103,15 @@ function TutorHome() {
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    confirmado: "bg-primary/10 text-primary",
-    pendente: "bg-warning/10 text-warning",
-    em_atendimento: "bg-accent/10 text-accent-foreground",
-    concluido: "bg-success/10 text-success",
-    cancelado: "bg-destructive/10 text-destructive",
+    scheduled: "bg-warning/10 text-warning",
+    confirmed: "bg-primary/10 text-primary",
+    in_progress: "bg-accent/10 text-accent-foreground",
+    completed: "bg-success/10 text-success",
+    canceled: "bg-destructive/10 text-destructive",
+    no_show: "bg-muted",
   };
-  return <span className={`px-3 py-1 rounded-full text-xs font-medium ${map[status] || "bg-muted"}`}>{status.replace("_", " ")}</span>;
+  const label: Record<string, string> = { scheduled: "agendada", confirmed: "confirmada", in_progress: "em atendimento", completed: "concluída", canceled: "cancelada", no_show: "faltou" };
+  return <span className={`px-3 py-1 rounded-full text-xs font-medium ${map[status] || "bg-muted"}`}>{label[status] || status}</span>;
 }
 
 function EmptyState({ title, description, action, icon }: { title: string; description: string; action?: React.ReactNode; icon: string }) {

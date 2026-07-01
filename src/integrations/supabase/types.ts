@@ -14,39 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      alerts: {
+      admin_actions: {
         Row: {
-          category: Database["public"]["Enums"]["alert_category"]
-          clinic_id: string
+          action: string
+          admin_id: string
           created_at: string
           id: string
-          level: Database["public"]["Enums"]["alert_level"]
+          payload: Json | null
+          target_clinic_id: string | null
+          target_user_id: string | null
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string
+          id?: string
+          payload?: Json | null
+          target_clinic_id?: string | null
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string
+          id?: string
+          payload?: Json | null
+          target_clinic_id?: string | null
+          target_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_actions_target_clinic_id_fkey"
+            columns: ["target_clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alerts: {
+        Row: {
+          clinic_id: string
+          created_at: string
+          due_date: string | null
+          id: string
+          kind: string
           message: string
           pet_id: string | null
           resolved: boolean
-          resolved_at: string | null
         }
         Insert: {
-          category: Database["public"]["Enums"]["alert_category"]
           clinic_id: string
           created_at?: string
+          due_date?: string | null
           id?: string
-          level: Database["public"]["Enums"]["alert_level"]
+          kind: string
           message: string
           pet_id?: string | null
           resolved?: boolean
-          resolved_at?: string | null
         }
         Update: {
-          category?: Database["public"]["Enums"]["alert_category"]
           clinic_id?: string
           created_at?: string
+          due_date?: string | null
           id?: string
-          level?: Database["public"]["Enums"]["alert_level"]
+          kind?: string
           message?: string
           pet_id?: string | null
           resolved?: boolean
-          resolved_at?: string | null
         }
         Relationships: [
           {
@@ -67,10 +102,10 @@ export type Database = {
       }
       appointments: {
         Row: {
-          appointment_type: Database["public"]["Enums"]["appointment_type"]
           clinic_id: string
           created_at: string
-          duration_minutes: number
+          created_by: string | null
+          duration_min: number
           id: string
           notes: string | null
           pet_id: string
@@ -79,13 +114,13 @@ export type Database = {
           status: Database["public"]["Enums"]["appointment_status"]
           tutor_id: string
           updated_at: string
-          veterinarian_id: string | null
+          vet_id: string | null
         }
         Insert: {
-          appointment_type?: Database["public"]["Enums"]["appointment_type"]
           clinic_id: string
           created_at?: string
-          duration_minutes?: number
+          created_by?: string | null
+          duration_min?: number
           id?: string
           notes?: string | null
           pet_id: string
@@ -94,13 +129,13 @@ export type Database = {
           status?: Database["public"]["Enums"]["appointment_status"]
           tutor_id: string
           updated_at?: string
-          veterinarian_id?: string | null
+          vet_id?: string | null
         }
         Update: {
-          appointment_type?: Database["public"]["Enums"]["appointment_type"]
           clinic_id?: string
           created_at?: string
-          duration_minutes?: number
+          created_by?: string | null
+          duration_min?: number
           id?: string
           notes?: string | null
           pet_id?: string
@@ -109,7 +144,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["appointment_status"]
           tutor_id?: string
           updated_at?: string
-          veterinarian_id?: string | null
+          vet_id?: string | null
         }
         Relationships: [
           {
@@ -138,87 +173,90 @@ export type Database = {
       clinics: {
         Row: {
           address: string | null
-          business_hours: Json | null
+          city: string | null
           cnpj: string | null
           created_at: string
           email: string | null
           id: string
           logo_url: string | null
           name: string
-          onboarding_completed: boolean
+          paused_at: string | null
+          paused_by: string | null
+          paused_reason: string | null
           phone: string | null
+          state: string | null
           status: Database["public"]["Enums"]["clinic_status"]
           updated_at: string
-          vaccine_alert_days: number
-          website: string | null
-          whatsapp: string | null
         }
         Insert: {
           address?: string | null
-          business_hours?: Json | null
+          city?: string | null
           cnpj?: string | null
           created_at?: string
           email?: string | null
           id?: string
           logo_url?: string | null
           name: string
-          onboarding_completed?: boolean
+          paused_at?: string | null
+          paused_by?: string | null
+          paused_reason?: string | null
           phone?: string | null
+          state?: string | null
           status?: Database["public"]["Enums"]["clinic_status"]
           updated_at?: string
-          vaccine_alert_days?: number
-          website?: string | null
-          whatsapp?: string | null
         }
         Update: {
           address?: string | null
-          business_hours?: Json | null
+          city?: string | null
           cnpj?: string | null
           created_at?: string
           email?: string | null
           id?: string
           logo_url?: string | null
           name?: string
-          onboarding_completed?: boolean
+          paused_at?: string | null
+          paused_by?: string | null
+          paused_reason?: string | null
           phone?: string | null
+          state?: string | null
           status?: Database["public"]["Enums"]["clinic_status"]
           updated_at?: string
-          vaccine_alert_days?: number
-          website?: string | null
-          whatsapp?: string | null
         }
         Relationships: []
       }
       exam_files: {
         Row: {
           clinic_id: string
-          content_type: string | null
           created_at: string
           file_name: string
-          file_url: string
+          file_path: string
+          file_type: string | null
           id: string
           medical_record_id: string | null
           pet_id: string
+          uploaded_by: string | null
         }
         Insert: {
           clinic_id: string
-          content_type?: string | null
           created_at?: string
           file_name: string
-          file_url: string
+          file_path: string
+          file_type?: string | null
           id?: string
           medical_record_id?: string | null
           pet_id: string
+          uploaded_by?: string | null
         }
         Update: {
           clinic_id?: string
-          content_type?: string | null
           created_at?: string
           file_name?: string
-          file_url?: string
+          file_path?: string
+          file_type?: string | null
           id?: string
           medical_record_id?: string | null
           pet_id?: string
+          uploaded_by?: string | null
         }
         Relationships: [
           {
@@ -249,78 +287,57 @@ export type Database = {
           anamnesis: string | null
           appointment_id: string | null
           clinic_id: string
-          closed: boolean
-          complaint: string | null
           created_at: string
           diagnosis: string | null
-          exam_notes: string | null
           heart_rate: number | null
-          hydration: string | null
           id: string
-          internal_notes: string | null
-          lymph_nodes: string | null
-          mucous: string | null
+          observations: string | null
           pet_id: string
+          physical_exam: string | null
           respiratory_rate: number | null
-          return_date: string | null
-          return_recommended: boolean | null
           temperature: number | null
           treatment: string | null
-          tutor_summary: string | null
           updated_at: string
-          veterinarian_id: string | null
+          vet_id: string | null
+          visit_date: string
           weight_kg: number | null
         }
         Insert: {
           anamnesis?: string | null
           appointment_id?: string | null
           clinic_id: string
-          closed?: boolean
-          complaint?: string | null
           created_at?: string
           diagnosis?: string | null
-          exam_notes?: string | null
           heart_rate?: number | null
-          hydration?: string | null
           id?: string
-          internal_notes?: string | null
-          lymph_nodes?: string | null
-          mucous?: string | null
+          observations?: string | null
           pet_id: string
+          physical_exam?: string | null
           respiratory_rate?: number | null
-          return_date?: string | null
-          return_recommended?: boolean | null
           temperature?: number | null
           treatment?: string | null
-          tutor_summary?: string | null
           updated_at?: string
-          veterinarian_id?: string | null
+          vet_id?: string | null
+          visit_date?: string
           weight_kg?: number | null
         }
         Update: {
           anamnesis?: string | null
           appointment_id?: string | null
           clinic_id?: string
-          closed?: boolean
-          complaint?: string | null
           created_at?: string
           diagnosis?: string | null
-          exam_notes?: string | null
           heart_rate?: number | null
-          hydration?: string | null
           id?: string
-          internal_notes?: string | null
-          lymph_nodes?: string | null
-          mucous?: string | null
+          observations?: string | null
           pet_id?: string
+          physical_exam?: string | null
           respiratory_rate?: number | null
-          return_date?: string | null
-          return_recommended?: boolean | null
           temperature?: number | null
           treatment?: string | null
-          tutor_summary?: string | null
           updated_at?: string
-          veterinarian_id?: string | null
+          vet_id?: string | null
+          visit_date?: string
           weight_kg?: number | null
         }
         Relationships: [
@@ -351,8 +368,8 @@ export type Database = {
         Row: {
           body: string | null
           created_at: string
+          href: string | null
           id: string
-          link: string | null
           read: boolean
           title: string
           user_id: string
@@ -360,8 +377,8 @@ export type Database = {
         Insert: {
           body?: string | null
           created_at?: string
+          href?: string | null
           id?: string
-          link?: string | null
           read?: boolean
           title: string
           user_id: string
@@ -369,8 +386,8 @@ export type Database = {
         Update: {
           body?: string | null
           created_at?: string
+          href?: string | null
           id?: string
-          link?: string | null
           read?: boolean
           title?: string
           user_id?: string
@@ -383,42 +400,39 @@ export type Database = {
           appointment_id: string | null
           clinic_id: string
           created_at: string
-          description: string | null
           id: string
-          method: Database["public"]["Enums"]["payment_method"] | null
+          method: string | null
           notes: string | null
           paid_at: string | null
-          pet_id: string | null
-          status: Database["public"]["Enums"]["payment_status"]
+          status: string
           tutor_id: string | null
+          updated_at: string
         }
         Insert: {
-          amount?: number
+          amount: number
           appointment_id?: string | null
           clinic_id: string
           created_at?: string
-          description?: string | null
           id?: string
-          method?: Database["public"]["Enums"]["payment_method"] | null
+          method?: string | null
           notes?: string | null
           paid_at?: string | null
-          pet_id?: string | null
-          status?: Database["public"]["Enums"]["payment_status"]
+          status?: string
           tutor_id?: string | null
+          updated_at?: string
         }
         Update: {
           amount?: number
           appointment_id?: string | null
           clinic_id?: string
           created_at?: string
-          description?: string | null
           id?: string
-          method?: Database["public"]["Enums"]["payment_method"] | null
+          method?: string | null
           notes?: string | null
           paid_at?: string | null
-          pet_id?: string | null
-          status?: Database["public"]["Enums"]["payment_status"]
+          status?: string
           tutor_id?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -435,102 +449,106 @@ export type Database = {
             referencedRelation: "clinics"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "payments_pet_id_fkey"
-            columns: ["pet_id"]
-            isOneToOne: false
-            referencedRelation: "pets"
-            referencedColumns: ["id"]
-          },
         ]
       }
       pets: {
         Row: {
-          allergies: string | null
           birth_date: string | null
           breed: string | null
+          clinic_id: string
           color: string | null
-          conditions: string | null
           created_at: string
           id: string
           microchip: string | null
           name: string
           neutered: boolean | null
+          notes: string | null
           photo_url: string | null
-          qr_token: string | null
-          sex: Database["public"]["Enums"]["pet_sex"] | null
+          public_token: string
+          sex: Database["public"]["Enums"]["pet_sex"]
           species: Database["public"]["Enums"]["pet_species"]
           tutor_id: string
           updated_at: string
           weight_kg: number | null
         }
         Insert: {
-          allergies?: string | null
           birth_date?: string | null
           breed?: string | null
+          clinic_id: string
           color?: string | null
-          conditions?: string | null
           created_at?: string
           id?: string
           microchip?: string | null
           name: string
           neutered?: boolean | null
+          notes?: string | null
           photo_url?: string | null
-          qr_token?: string | null
-          sex?: Database["public"]["Enums"]["pet_sex"] | null
-          species: Database["public"]["Enums"]["pet_species"]
+          public_token?: string
+          sex?: Database["public"]["Enums"]["pet_sex"]
+          species?: Database["public"]["Enums"]["pet_species"]
           tutor_id: string
           updated_at?: string
           weight_kg?: number | null
         }
         Update: {
-          allergies?: string | null
           birth_date?: string | null
           breed?: string | null
+          clinic_id?: string
           color?: string | null
-          conditions?: string | null
           created_at?: string
           id?: string
           microchip?: string | null
           name?: string
           neutered?: boolean | null
+          notes?: string | null
           photo_url?: string | null
-          qr_token?: string | null
-          sex?: Database["public"]["Enums"]["pet_sex"] | null
+          public_token?: string
+          sex?: Database["public"]["Enums"]["pet_sex"]
           species?: Database["public"]["Enums"]["pet_species"]
           tutor_id?: string
           updated_at?: string
           weight_kg?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pets_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       prescriptions: {
         Row: {
           created_at: string
-          dose: string | null
+          dosage: string | null
           duration: string | null
           frequency: string | null
           id: string
           medical_record_id: string
           medication: string
+          notes: string | null
         }
         Insert: {
           created_at?: string
-          dose?: string | null
+          dosage?: string | null
           duration?: string | null
           frequency?: string | null
           id?: string
           medical_record_id: string
           medication: string
+          notes?: string | null
         }
         Update: {
           created_at?: string
-          dose?: string | null
+          dosage?: string | null
           duration?: string | null
           frequency?: string | null
           id?: string
           medical_record_id?: string
           medication?: string
+          notes?: string | null
         }
         Relationships: [
           {
@@ -544,70 +562,84 @@ export type Database = {
       }
       profiles: {
         Row: {
-          address: string | null
           avatar_url: string | null
           cpf: string | null
           created_at: string
           email: string | null
-          full_name: string
+          full_name: string | null
           id: string
           phone: string | null
+          primary_clinic_id: string | null
+          status: string
           updated_at: string
-          whatsapp: string | null
         }
         Insert: {
-          address?: string | null
           avatar_url?: string | null
           cpf?: string | null
           created_at?: string
           email?: string | null
-          full_name?: string
+          full_name?: string | null
           id: string
           phone?: string | null
+          primary_clinic_id?: string | null
+          status?: string
           updated_at?: string
-          whatsapp?: string | null
         }
         Update: {
-          address?: string | null
           avatar_url?: string | null
           cpf?: string | null
           created_at?: string
           email?: string | null
-          full_name?: string
+          full_name?: string | null
           id?: string
           phone?: string | null
+          primary_clinic_id?: string | null
+          status?: string
           updated_at?: string
-          whatsapp?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_primary_clinic_id_fkey"
+            columns: ["primary_clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       services: {
         Row: {
           active: boolean
           clinic_id: string
           created_at: string
-          duration_minutes: number
+          description: string | null
+          duration_min: number
           id: string
           name: string
           price: number
+          updated_at: string
         }
         Insert: {
           active?: boolean
           clinic_id: string
           created_at?: string
-          duration_minutes?: number
+          description?: string | null
+          duration_min?: number
           id?: string
           name: string
           price?: number
+          updated_at?: string
         }
         Update: {
           active?: boolean
           clinic_id?: string
           created_at?: string
-          duration_minutes?: number
+          description?: string | null
+          duration_min?: number
           id?: string
           name?: string
           price?: number
+          updated_at?: string
         }
         Relationships: [
           {
@@ -656,78 +688,73 @@ export type Database = {
       }
       vaccine_types: {
         Row: {
-          clinic_id: string
           created_at: string
-          default_interval_days: number
+          description: string | null
           id: string
+          interval_days: number | null
           name: string
+          species: Database["public"]["Enums"]["pet_species"]
         }
         Insert: {
-          clinic_id: string
           created_at?: string
-          default_interval_days?: number
+          description?: string | null
           id?: string
+          interval_days?: number | null
           name: string
+          species: Database["public"]["Enums"]["pet_species"]
         }
         Update: {
-          clinic_id?: string
           created_at?: string
-          default_interval_days?: number
+          description?: string | null
           id?: string
+          interval_days?: number | null
           name?: string
+          species?: Database["public"]["Enums"]["pet_species"]
         }
-        Relationships: [
-          {
-            foreignKeyName: "vaccine_types_clinic_id_fkey"
-            columns: ["clinic_id"]
-            isOneToOne: false
-            referencedRelation: "clinics"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       vaccines: {
         Row: {
           applied_at: string
+          applied_by: string | null
+          batch: string | null
           clinic_id: string
           created_at: string
           id: string
-          lot: string | null
-          manufacturer: string | null
           next_dose_at: string | null
           notes: string | null
           pet_id: string
+          updated_at: string
           vaccine_name: string
           vaccine_type_id: string | null
-          veterinarian_id: string | null
         }
         Insert: {
           applied_at?: string
+          applied_by?: string | null
+          batch?: string | null
           clinic_id: string
           created_at?: string
           id?: string
-          lot?: string | null
-          manufacturer?: string | null
           next_dose_at?: string | null
           notes?: string | null
           pet_id: string
+          updated_at?: string
           vaccine_name: string
           vaccine_type_id?: string | null
-          veterinarian_id?: string | null
         }
         Update: {
           applied_at?: string
+          applied_by?: string | null
+          batch?: string | null
           clinic_id?: string
           created_at?: string
           id?: string
-          lot?: string | null
-          manufacturer?: string | null
           next_dose_at?: string | null
           notes?: string | null
           pet_id?: string
+          updated_at?: string
           vaccine_name?: string
           vaccine_type_id?: string | null
-          veterinarian_id?: string | null
         }
         Relationships: [
           {
@@ -773,6 +800,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_account_active: { Args: { _user_id: string }; Returns: boolean }
       is_clinic_member: {
         Args: { _clinic_id: string; _user_id: string }
         Returns: boolean
@@ -789,18 +817,19 @@ export type Database = {
         | "receptionist"
         | "tutor"
       appointment_status:
-        | "pendente"
-        | "confirmado"
-        | "em_atendimento"
-        | "concluido"
-        | "cancelado"
+        | "scheduled"
+        | "confirmed"
+        | "in_progress"
+        | "completed"
+        | "canceled"
+        | "no_show"
       appointment_type:
         | "consulta"
         | "retorno"
         | "banho_tosa"
         | "vacinacao"
         | "emergencia"
-      clinic_status: "ativa" | "inativa" | "trial"
+      clinic_status: "active" | "paused" | "canceled"
       payment_method:
         | "dinheiro"
         | "pix"
@@ -808,8 +837,8 @@ export type Database = {
         | "cartao_credito"
         | "transferencia"
       payment_status: "pago" | "pendente" | "cancelado"
-      pet_sex: "macho" | "femea"
-      pet_species: "cao" | "gato" | "ave" | "roedor" | "reptil" | "outro"
+      pet_sex: "male" | "female" | "unknown"
+      pet_species: "dog" | "cat" | "bird" | "rodent" | "reptile" | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -947,11 +976,12 @@ export const Constants = {
         "tutor",
       ],
       appointment_status: [
-        "pendente",
-        "confirmado",
-        "em_atendimento",
-        "concluido",
-        "cancelado",
+        "scheduled",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "canceled",
+        "no_show",
       ],
       appointment_type: [
         "consulta",
@@ -960,7 +990,7 @@ export const Constants = {
         "vacinacao",
         "emergencia",
       ],
-      clinic_status: ["ativa", "inativa", "trial"],
+      clinic_status: ["active", "paused", "canceled"],
       payment_method: [
         "dinheiro",
         "pix",
@@ -969,8 +999,8 @@ export const Constants = {
         "transferencia",
       ],
       payment_status: ["pago", "pendente", "cancelado"],
-      pet_sex: ["macho", "femea"],
-      pet_species: ["cao", "gato", "ave", "roedor", "reptil", "outro"],
+      pet_sex: ["male", "female", "unknown"],
+      pet_species: ["dog", "cat", "bird", "rodent", "reptile", "other"],
     },
   },
 } as const
