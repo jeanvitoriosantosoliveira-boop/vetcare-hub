@@ -21,6 +21,7 @@ import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedClinicaIndexRouteImport } from './routes/_authenticated/clinica.index'
 import { Route as AuthenticatedTutorPetsRouteImport } from './routes/_authenticated/tutor.pets'
 import { Route as AuthenticatedTutorAgendarRouteImport } from './routes/_authenticated/tutor.agendar'
+import { Route as AuthenticatedClinicaAgendaRouteImport } from './routes/_authenticated/clinica.agenda'
 import { Route as AuthenticatedTutorPetsNovoRouteImport } from './routes/_authenticated/tutor.pets.novo'
 import { Route as AuthenticatedTutorPetsPetIdRouteImport } from './routes/_authenticated/tutor.pets.$petId'
 
@@ -85,6 +86,12 @@ const AuthenticatedTutorAgendarRoute =
     path: '/agendar',
     getParentRoute: () => AuthenticatedTutorRoute,
   } as any)
+const AuthenticatedClinicaAgendaRoute =
+  AuthenticatedClinicaAgendaRouteImport.update({
+    id: '/agenda',
+    path: '/agenda',
+    getParentRoute: () => AuthenticatedClinicaRoute,
+  } as any)
 const AuthenticatedTutorPetsNovoRoute =
   AuthenticatedTutorPetsNovoRouteImport.update({
     id: '/novo',
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/clinica': typeof AuthenticatedClinicaRouteWithChildren
   '/tutor': typeof AuthenticatedTutorRouteWithChildren
   '/p/$token': typeof PTokenRoute
+  '/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
   '/clinica/': typeof AuthenticatedClinicaIndexRoute
@@ -119,6 +127,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/p/$token': typeof PTokenRoute
+  '/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
   '/clinica': typeof AuthenticatedClinicaIndexRoute
@@ -136,6 +145,7 @@ export interface FileRoutesById {
   '/_authenticated/clinica': typeof AuthenticatedClinicaRouteWithChildren
   '/_authenticated/tutor': typeof AuthenticatedTutorRouteWithChildren
   '/p/$token': typeof PTokenRoute
+  '/_authenticated/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/_authenticated/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/_authenticated/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
   '/_authenticated/clinica/': typeof AuthenticatedClinicaIndexRoute
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/tutor'
     | '/p/$token'
+    | '/clinica/agenda'
     | '/tutor/agendar'
     | '/tutor/pets'
     | '/clinica/'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin'
     | '/p/$token'
+    | '/clinica/agenda'
     | '/tutor/agendar'
     | '/tutor/pets'
     | '/clinica'
@@ -182,6 +194,7 @@ export interface FileRouteTypes {
     | '/_authenticated/clinica'
     | '/_authenticated/tutor'
     | '/p/$token'
+    | '/_authenticated/clinica/agenda'
     | '/_authenticated/tutor/agendar'
     | '/_authenticated/tutor/pets'
     | '/_authenticated/clinica/'
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTutorAgendarRouteImport
       parentRoute: typeof AuthenticatedTutorRoute
     }
+    '/_authenticated/clinica/agenda': {
+      id: '/_authenticated/clinica/agenda'
+      path: '/agenda'
+      fullPath: '/clinica/agenda'
+      preLoaderRoute: typeof AuthenticatedClinicaAgendaRouteImport
+      parentRoute: typeof AuthenticatedClinicaRoute
+    }
     '/_authenticated/tutor/pets/novo': {
       id: '/_authenticated/tutor/pets/novo'
       path: '/novo'
@@ -302,10 +322,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedClinicaRouteChildren {
+  AuthenticatedClinicaAgendaRoute: typeof AuthenticatedClinicaAgendaRoute
   AuthenticatedClinicaIndexRoute: typeof AuthenticatedClinicaIndexRoute
 }
 
 const AuthenticatedClinicaRouteChildren: AuthenticatedClinicaRouteChildren = {
+  AuthenticatedClinicaAgendaRoute: AuthenticatedClinicaAgendaRoute,
   AuthenticatedClinicaIndexRoute: AuthenticatedClinicaIndexRoute,
 }
 
