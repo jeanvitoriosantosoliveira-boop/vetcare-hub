@@ -23,6 +23,7 @@ import { Route as AuthenticatedTutorPetsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedTutorAgendarRouteImport } from './routes/_authenticated/tutor.agendar'
 import { Route as AuthenticatedClinicaVacinasRouteImport } from './routes/_authenticated/clinica.vacinas'
 import { Route as AuthenticatedClinicaProntuariosRouteImport } from './routes/_authenticated/clinica.prontuarios'
+import { Route as AuthenticatedClinicaFinanceiroRouteImport } from './routes/_authenticated/clinica.financeiro'
 import { Route as AuthenticatedClinicaCrmRouteImport } from './routes/_authenticated/clinica.crm'
 import { Route as AuthenticatedClinicaAlertasRouteImport } from './routes/_authenticated/clinica.alertas'
 import { Route as AuthenticatedClinicaAgendaRouteImport } from './routes/_authenticated/clinica.agenda'
@@ -102,6 +103,12 @@ const AuthenticatedClinicaProntuariosRoute =
     path: '/prontuarios',
     getParentRoute: () => AuthenticatedClinicaRoute,
   } as any)
+const AuthenticatedClinicaFinanceiroRoute =
+  AuthenticatedClinicaFinanceiroRouteImport.update({
+    id: '/financeiro',
+    path: '/financeiro',
+    getParentRoute: () => AuthenticatedClinicaRoute,
+  } as any)
 const AuthenticatedClinicaCrmRoute = AuthenticatedClinicaCrmRouteImport.update({
   id: '/crm',
   path: '/crm',
@@ -143,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/clinica/alertas': typeof AuthenticatedClinicaAlertasRoute
   '/clinica/crm': typeof AuthenticatedClinicaCrmRoute
+  '/clinica/financeiro': typeof AuthenticatedClinicaFinanceiroRoute
   '/clinica/prontuarios': typeof AuthenticatedClinicaProntuariosRoute
   '/clinica/vacinas': typeof AuthenticatedClinicaVacinasRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
@@ -161,6 +169,7 @@ export interface FileRoutesByTo {
   '/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/clinica/alertas': typeof AuthenticatedClinicaAlertasRoute
   '/clinica/crm': typeof AuthenticatedClinicaCrmRoute
+  '/clinica/financeiro': typeof AuthenticatedClinicaFinanceiroRoute
   '/clinica/prontuarios': typeof AuthenticatedClinicaProntuariosRoute
   '/clinica/vacinas': typeof AuthenticatedClinicaVacinasRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
@@ -183,6 +192,7 @@ export interface FileRoutesById {
   '/_authenticated/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/_authenticated/clinica/alertas': typeof AuthenticatedClinicaAlertasRoute
   '/_authenticated/clinica/crm': typeof AuthenticatedClinicaCrmRoute
+  '/_authenticated/clinica/financeiro': typeof AuthenticatedClinicaFinanceiroRoute
   '/_authenticated/clinica/prontuarios': typeof AuthenticatedClinicaProntuariosRoute
   '/_authenticated/clinica/vacinas': typeof AuthenticatedClinicaVacinasRoute
   '/_authenticated/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/clinica/agenda'
     | '/clinica/alertas'
     | '/clinica/crm'
+    | '/clinica/financeiro'
     | '/clinica/prontuarios'
     | '/clinica/vacinas'
     | '/tutor/agendar'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/clinica/agenda'
     | '/clinica/alertas'
     | '/clinica/crm'
+    | '/clinica/financeiro'
     | '/clinica/prontuarios'
     | '/clinica/vacinas'
     | '/tutor/agendar'
@@ -244,6 +256,7 @@ export interface FileRouteTypes {
     | '/_authenticated/clinica/agenda'
     | '/_authenticated/clinica/alertas'
     | '/_authenticated/clinica/crm'
+    | '/_authenticated/clinica/financeiro'
     | '/_authenticated/clinica/prontuarios'
     | '/_authenticated/clinica/vacinas'
     | '/_authenticated/tutor/agendar'
@@ -362,6 +375,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClinicaProntuariosRouteImport
       parentRoute: typeof AuthenticatedClinicaRoute
     }
+    '/_authenticated/clinica/financeiro': {
+      id: '/_authenticated/clinica/financeiro'
+      path: '/financeiro'
+      fullPath: '/clinica/financeiro'
+      preLoaderRoute: typeof AuthenticatedClinicaFinanceiroRouteImport
+      parentRoute: typeof AuthenticatedClinicaRoute
+    }
     '/_authenticated/clinica/crm': {
       id: '/_authenticated/clinica/crm'
       path: '/crm'
@@ -404,6 +424,7 @@ interface AuthenticatedClinicaRouteChildren {
   AuthenticatedClinicaAgendaRoute: typeof AuthenticatedClinicaAgendaRoute
   AuthenticatedClinicaAlertasRoute: typeof AuthenticatedClinicaAlertasRoute
   AuthenticatedClinicaCrmRoute: typeof AuthenticatedClinicaCrmRoute
+  AuthenticatedClinicaFinanceiroRoute: typeof AuthenticatedClinicaFinanceiroRoute
   AuthenticatedClinicaProntuariosRoute: typeof AuthenticatedClinicaProntuariosRoute
   AuthenticatedClinicaVacinasRoute: typeof AuthenticatedClinicaVacinasRoute
   AuthenticatedClinicaIndexRoute: typeof AuthenticatedClinicaIndexRoute
@@ -413,6 +434,7 @@ const AuthenticatedClinicaRouteChildren: AuthenticatedClinicaRouteChildren = {
   AuthenticatedClinicaAgendaRoute: AuthenticatedClinicaAgendaRoute,
   AuthenticatedClinicaAlertasRoute: AuthenticatedClinicaAlertasRoute,
   AuthenticatedClinicaCrmRoute: AuthenticatedClinicaCrmRoute,
+  AuthenticatedClinicaFinanceiroRoute: AuthenticatedClinicaFinanceiroRoute,
   AuthenticatedClinicaProntuariosRoute: AuthenticatedClinicaProntuariosRoute,
   AuthenticatedClinicaVacinasRoute: AuthenticatedClinicaVacinasRoute,
   AuthenticatedClinicaIndexRoute: AuthenticatedClinicaIndexRoute,
