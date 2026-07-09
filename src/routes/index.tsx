@@ -110,12 +110,10 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto">
             <div className="text-primary text-sm font-bold tracking-widest uppercase">Como o JVet resolve</div>
-            <h2 className="mt-3 text-3xl md:text-4xl font-black">Três painéis. Uma só verdade sobre cada pet.</h2>
-            <p className="mt-4 text-muted-foreground">Admin controla clínicas. Clínica controla o dia a dia. Tutor acompanha tudo do celular. Ninguém escapa da tela certa.</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-black">Dois painéis. Uma só verdade sobre cada pet.</h2>
+            <p className="mt-4 text-muted-foreground">Clínica controla o dia a dia. Tutor acompanha tudo do celular. Ninguém escapa da tela certa</p>
           </div>
           <div className="mt-10 grid md:grid-cols-3 gap-5">
-            <PillarCard color="bg-primary" icon="admin_panel_settings" title="Painel do Admin"
-              items={["Criar e pausar clínicas em 1 clique","Assinaturas centralizadas","Gestão de todos os vets do país"]} />
             <PillarCard color="bg-accent" icon="local_hospital" title="Painel da Clínica"
               items={["Agenda semanal + confirmação","Prontuário digital completo","Alertas de vacina automáticos","Financeiro por consulta"]} />
             <PillarCard color="bg-gradient-jvet" icon="pets" title="Portal do Tutor"
@@ -198,7 +196,6 @@ function Landing() {
       {/* PROVA / SEGURANÇA */}
       <section className="bg-muted/30 py-16">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-4">
-          <SafetyCard icon="lock" title="LGPD" text="Isolamento por clínica no banco (RLS)" />
           <SafetyCard icon="cloud_done" title="Cloud" text="Infra gerenciada, uptime 99.9%" />
           <SafetyCard icon="support_agent" title="Suporte real" text="Humano, no WhatsApp e por chamado" />
           <SafetyCard icon="update" title="Atualizações" text="Novos recursos entram sem custo extra" />
@@ -215,15 +212,13 @@ function Landing() {
           <Faq q="Como é o pagamento? Tem mensalidade?"
             a="Você paga uma vez pela aquisição do sistema. Depois, só paga a mensalidade do banco de dados e do suporte sem contrato de refém, sem multa." />
           <Faq q="Os dados são meus?"
-            a="Sim. Cada clínica opera num ambiente isolado (Row Level Security). Você pode exportar tudo a qualquer momento." />
+            a="Sim. Cada clínica opera num ambiente isolado (Row Level Security)" />
           <Faq q="Preciso de servidor?"
             a="Não. Rodamos em nuvem gerenciada. Sua clínica só precisa de internet e navegador." />
           <Faq q="Quanto tempo leva pra começar?"
             a="Em 7 dias sua clínica está ativa, com equipe treinada e o portal do tutor liberado." />
           <Faq q="Consigo cadastrar meus clientes atuais?"
             a="Sim. Fazemos importação inicial de tutores e pets no onboarding." />
-          <Faq q="E se eu pausar a clínica um mês?"
-            a="O admin pausa a clínica com 1 clique todos os acessos ficam suspensos automaticamente e reativam quando você quiser." />
         </div>
       </section>
 
