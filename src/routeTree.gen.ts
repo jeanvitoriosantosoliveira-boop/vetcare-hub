@@ -21,6 +21,7 @@ import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedClinicaIndexRouteImport } from './routes/_authenticated/clinica.index'
 import { Route as AuthenticatedTutorPetsRouteImport } from './routes/_authenticated/tutor.pets'
 import { Route as AuthenticatedTutorAgendarRouteImport } from './routes/_authenticated/tutor.agendar'
+import { Route as AuthenticatedClinicaProntuariosRouteImport } from './routes/_authenticated/clinica.prontuarios'
 import { Route as AuthenticatedClinicaCrmRouteImport } from './routes/_authenticated/clinica.crm'
 import { Route as AuthenticatedClinicaAgendaRouteImport } from './routes/_authenticated/clinica.agenda'
 import { Route as AuthenticatedTutorPetsNovoRouteImport } from './routes/_authenticated/tutor.pets.novo'
@@ -87,6 +88,12 @@ const AuthenticatedTutorAgendarRoute =
     path: '/agendar',
     getParentRoute: () => AuthenticatedTutorRoute,
   } as any)
+const AuthenticatedClinicaProntuariosRoute =
+  AuthenticatedClinicaProntuariosRouteImport.update({
+    id: '/prontuarios',
+    path: '/prontuarios',
+    getParentRoute: () => AuthenticatedClinicaRoute,
+  } as any)
 const AuthenticatedClinicaCrmRoute = AuthenticatedClinicaCrmRouteImport.update({
   id: '/crm',
   path: '/crm',
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/p/$token': typeof PTokenRoute
   '/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/clinica/crm': typeof AuthenticatedClinicaCrmRoute
+  '/clinica/prontuarios': typeof AuthenticatedClinicaProntuariosRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
   '/clinica/': typeof AuthenticatedClinicaIndexRoute
@@ -136,6 +144,7 @@ export interface FileRoutesByTo {
   '/p/$token': typeof PTokenRoute
   '/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/clinica/crm': typeof AuthenticatedClinicaCrmRoute
+  '/clinica/prontuarios': typeof AuthenticatedClinicaProntuariosRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
   '/clinica': typeof AuthenticatedClinicaIndexRoute
@@ -155,6 +164,7 @@ export interface FileRoutesById {
   '/p/$token': typeof PTokenRoute
   '/_authenticated/clinica/agenda': typeof AuthenticatedClinicaAgendaRoute
   '/_authenticated/clinica/crm': typeof AuthenticatedClinicaCrmRoute
+  '/_authenticated/clinica/prontuarios': typeof AuthenticatedClinicaProntuariosRoute
   '/_authenticated/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/_authenticated/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
   '/_authenticated/clinica/': typeof AuthenticatedClinicaIndexRoute
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/p/$token'
     | '/clinica/agenda'
     | '/clinica/crm'
+    | '/clinica/prontuarios'
     | '/tutor/agendar'
     | '/tutor/pets'
     | '/clinica/'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/p/$token'
     | '/clinica/agenda'
     | '/clinica/crm'
+    | '/clinica/prontuarios'
     | '/tutor/agendar'
     | '/tutor/pets'
     | '/clinica'
@@ -207,6 +219,7 @@ export interface FileRouteTypes {
     | '/p/$token'
     | '/_authenticated/clinica/agenda'
     | '/_authenticated/clinica/crm'
+    | '/_authenticated/clinica/prontuarios'
     | '/_authenticated/tutor/agendar'
     | '/_authenticated/tutor/pets'
     | '/_authenticated/clinica/'
@@ -309,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTutorAgendarRouteImport
       parentRoute: typeof AuthenticatedTutorRoute
     }
+    '/_authenticated/clinica/prontuarios': {
+      id: '/_authenticated/clinica/prontuarios'
+      path: '/prontuarios'
+      fullPath: '/clinica/prontuarios'
+      preLoaderRoute: typeof AuthenticatedClinicaProntuariosRouteImport
+      parentRoute: typeof AuthenticatedClinicaRoute
+    }
     '/_authenticated/clinica/crm': {
       id: '/_authenticated/clinica/crm'
       path: '/crm'
@@ -343,12 +363,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedClinicaRouteChildren {
   AuthenticatedClinicaAgendaRoute: typeof AuthenticatedClinicaAgendaRoute
   AuthenticatedClinicaCrmRoute: typeof AuthenticatedClinicaCrmRoute
+  AuthenticatedClinicaProntuariosRoute: typeof AuthenticatedClinicaProntuariosRoute
   AuthenticatedClinicaIndexRoute: typeof AuthenticatedClinicaIndexRoute
 }
 
 const AuthenticatedClinicaRouteChildren: AuthenticatedClinicaRouteChildren = {
   AuthenticatedClinicaAgendaRoute: AuthenticatedClinicaAgendaRoute,
   AuthenticatedClinicaCrmRoute: AuthenticatedClinicaCrmRoute,
+  AuthenticatedClinicaProntuariosRoute: AuthenticatedClinicaProntuariosRoute,
   AuthenticatedClinicaIndexRoute: AuthenticatedClinicaIndexRoute,
 }
 
