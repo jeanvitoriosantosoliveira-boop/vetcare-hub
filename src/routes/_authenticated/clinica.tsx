@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/clinica")({
   component: ClinicaLayout,
 });
 
-const NAV = [
+const NAV: { to: string; label: string; icon: string; exact?: boolean }[] = [
   { to: "/clinica", label: "Dashboard", icon: "dashboard", exact: true },
   { to: "/clinica/agenda", label: "Agenda", icon: "event" },
   { to: "/clinica/crm", label: "CRM (Tutores & Pets)", icon: "groups" },
@@ -20,7 +20,7 @@ const NAV = [
   { to: "/clinica/servicos", label: "Serviços", icon: "medical_services" },
   { to: "/clinica/equipe", label: "Equipe", icon: "badge" },
   { to: "/clinica/configuracoes", label: "Configurações", icon: "settings" },
-] as const;
+];
 
 function ClinicaLayout() {
   const { data: ctx, isLoading } = useClinicContext();
@@ -54,7 +54,7 @@ function ClinicaLayout() {
             return (
               <Link
                 key={item.to}
-                to={item.to}
+                to={item.to as any}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${active ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80 hover:bg-muted"}`}
               >
                 <span className="material-symbols-rounded" style={{fontSize:20}}>{item.icon}</span>
@@ -76,7 +76,7 @@ function ClinicaLayout() {
         {NAV.map((item) => {
           const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
           return (
-            <Link key={item.to} to={item.to} className={`shrink-0 px-3 py-1.5 rounded-full text-xs ${active ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+            <Link key={item.to} to={item.to as any} className={`shrink-0 px-3 py-1.5 rounded-full text-xs ${active ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
               {item.label.split(" ")[0]}
             </Link>
           );
