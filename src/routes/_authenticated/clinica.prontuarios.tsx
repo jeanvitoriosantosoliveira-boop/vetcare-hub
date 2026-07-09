@@ -121,7 +121,7 @@ function NewRecordDialog({ clinicId }: { clinicId: string }) {
     toast.success("Prontuário criado");
     setOpen(false);
     setF({ pet_id:"", weight_kg:"", temperature:"", anamnesis:"", diagnosis:"", treatment:"", observations:"" });
-    qc.invalidateQueries({ queryKey: ["records"] });
+    qc.invalidateQueries({ queryKey: ["records", clinicId] });
   }
 
   return (

@@ -57,7 +57,7 @@ function AgendaPage() {
     const { error } = await supabase.from("appointments").update({ status: status as any }).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Status atualizado");
-    qc.invalidateQueries({ queryKey: ["agenda"] });
+    qc.invalidateQueries({ queryKey: ["agenda", clinicId] });
     qc.invalidateQueries({ queryKey: ["clinica","dash"] });
   }
 
@@ -182,7 +182,7 @@ function NewAppointmentDialog({ clinicId }: { clinicId: string }) {
     toast.success("Agendamento criado");
     setOpen(false);
     setF({ pet_id:"", service_id:"", scheduled_at:"", duration_min:"30", notes:"" });
-    qc.invalidateQueries({ queryKey: ["agenda"] });
+    qc.invalidateQueries({ queryKey: ["agenda", clinicId] });
   }
 
   return (

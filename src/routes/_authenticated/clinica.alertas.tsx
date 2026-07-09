@@ -30,7 +30,7 @@ function AlertasPage() {
   async function resolve(id: string) {
     const { error } = await supabase.from("alerts").update({ resolved: true }).eq("id", id);
     if (error) return toast.error(error.message);
-    qc.invalidateQueries({ queryKey: ["alerts"] });
+    qc.invalidateQueries({ queryKey: ["alerts", clinicId] });
     qc.invalidateQueries({ queryKey: ["clinica","dash"] });
     toast.success("Resolvido");
   }

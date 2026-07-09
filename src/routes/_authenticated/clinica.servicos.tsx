@@ -37,16 +37,16 @@ function ServicosPage() {
     if (error) return toast.error(error.message);
     toast.success("Serviço criado");
     setF({ name:"", price:"0", duration_min:"30", description:"" });
-    qc.invalidateQueries({ queryKey: ["services"] });
+    qc.invalidateQueries({ queryKey: ["services", clinicId] });
   }
   async function toggle(id: string, active: boolean) {
     await supabase.from("services").update({ active: !active }).eq("id", id);
-    qc.invalidateQueries({ queryKey: ["services"] });
+    qc.invalidateQueries({ queryKey: ["services", clinicId] });
   }
   async function remove(id: string) {
     if (!confirm("Excluir este serviço?")) return;
     await supabase.from("services").delete().eq("id", id);
-    qc.invalidateQueries({ queryKey: ["services"] });
+    qc.invalidateQueries({ queryKey: ["services", clinicId] });
   }
 
   return (

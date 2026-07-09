@@ -39,7 +39,7 @@ function FinanceiroPage() {
 
   async function markPaid(id: string) {
     await supabase.from("payments").update({ status:"pago", paid_at: new Date().toISOString() }).eq("id", id);
-    qc.invalidateQueries({ queryKey: ["payments"] });
+    qc.invalidateQueries({ queryKey: ["payments", clinicId] });
     toast.success("Marcado como pago");
   }
 
@@ -100,7 +100,7 @@ function NewPaymentDialog({ clinicId }: { clinicId: string }) {
     toast.success("Lançamento salvo");
     setOpen(false);
     setF({ amount:"", method:"pix", status:"pago", notes:"" });
-    qc.invalidateQueries({ queryKey: ["payments"] });
+    qc.invalidateQueries({ queryKey: ["payments", clinicId] });
     qc.invalidateQueries({ queryKey: ["clinica","dash"] });
   }
   return (

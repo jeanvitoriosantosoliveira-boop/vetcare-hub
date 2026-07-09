@@ -80,7 +80,7 @@ function NewStaffDialog({ clinicId }: { clinicId: string }) {
     toast.success("Membro adicionado! Envie a senha.");
     setF({ full_name:"", email:"", password:"", phone:"", role:"veterinarian" });
     setOpen(false);
-    qc.invalidateQueries({ queryKey: ["staff"] });
+    qc.invalidateQueries({ queryKey: ["staff", clinicId] });
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>

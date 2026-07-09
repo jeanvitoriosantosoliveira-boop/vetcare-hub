@@ -129,8 +129,8 @@ function NewVaccineDialog({ clinicId }: { clinicId: string }) {
     toast.success("Vacina registrada");
     setF({ pet_id:"", vaccine_name:"", applied_at:"", next_dose_at:"", batch:"" });
     setOpen(false);
-    qc.invalidateQueries({ queryKey: ["vaccines"] });
-    qc.invalidateQueries({ queryKey: ["alerts"] });
+    qc.invalidateQueries({ queryKey: ["vaccines", clinicId] });
+    qc.invalidateQueries({ queryKey: ["alerts", clinicId] });
   }
 
   return (

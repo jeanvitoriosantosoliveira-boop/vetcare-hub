@@ -126,7 +126,7 @@ function NewTutorDialog({ clinicId }: { clinicId: string }) {
     toast.success("Tutor cadastrado!");
     setF({ full_name:"", email:"", password:"", phone:"" });
     setOpen(false);
-    qc.invalidateQueries({ queryKey: ["crm-tutors"] });
+    qc.invalidateQueries({ queryKey: ["crm-tutors", clinicId] });
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -164,7 +164,7 @@ function NewPetDialog({ clinicId, tutors }: { clinicId: string; tutors: any[] })
     toast.success("Pet cadastrado!");
     setF({ name:"", species:"dog", breed:"", sex:"unknown", tutor_id:"", birth_date:"" });
     setOpen(false);
-    qc.invalidateQueries({ queryKey: ["crm-pets"] });
+    qc.invalidateQueries({ queryKey: ["crm-pets", clinicId] });
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
