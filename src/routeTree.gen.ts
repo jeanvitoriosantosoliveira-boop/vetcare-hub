@@ -18,6 +18,7 @@ import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedClinicaRouteImport } from './routes/_authenticated/clinica'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authenticated/tutor.index'
+import { Route as AuthenticatedClinicaIndexRouteImport } from './routes/_authenticated/clinica.index'
 import { Route as AuthenticatedTutorPetsRouteImport } from './routes/_authenticated/tutor.pets'
 import { Route as AuthenticatedTutorAgendarRouteImport } from './routes/_authenticated/tutor.agendar'
 import { Route as AuthenticatedTutorPetsNovoRouteImport } from './routes/_authenticated/tutor.pets.novo'
@@ -67,6 +68,12 @@ const AuthenticatedTutorIndexRoute = AuthenticatedTutorIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedTutorRoute,
 } as any)
+const AuthenticatedClinicaIndexRoute =
+  AuthenticatedClinicaIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedClinicaRoute,
+  } as any)
 const AuthenticatedTutorPetsRoute = AuthenticatedTutorPetsRouteImport.update({
   id: '/pets',
   path: '/pets',
@@ -96,11 +103,12 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/clinica': typeof AuthenticatedClinicaRoute
+  '/clinica': typeof AuthenticatedClinicaRouteWithChildren
   '/tutor': typeof AuthenticatedTutorRouteWithChildren
   '/p/$token': typeof PTokenRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
+  '/clinica/': typeof AuthenticatedClinicaIndexRoute
   '/tutor/': typeof AuthenticatedTutorIndexRoute
   '/tutor/pets/$petId': typeof AuthenticatedTutorPetsPetIdRoute
   '/tutor/pets/novo': typeof AuthenticatedTutorPetsNovoRoute
@@ -110,10 +118,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/clinica': typeof AuthenticatedClinicaRoute
   '/p/$token': typeof PTokenRoute
   '/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
+  '/clinica': typeof AuthenticatedClinicaIndexRoute
   '/tutor': typeof AuthenticatedTutorIndexRoute
   '/tutor/pets/$petId': typeof AuthenticatedTutorPetsPetIdRoute
   '/tutor/pets/novo': typeof AuthenticatedTutorPetsNovoRoute
@@ -125,11 +133,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
-  '/_authenticated/clinica': typeof AuthenticatedClinicaRoute
+  '/_authenticated/clinica': typeof AuthenticatedClinicaRouteWithChildren
   '/_authenticated/tutor': typeof AuthenticatedTutorRouteWithChildren
   '/p/$token': typeof PTokenRoute
   '/_authenticated/tutor/agendar': typeof AuthenticatedTutorAgendarRoute
   '/_authenticated/tutor/pets': typeof AuthenticatedTutorPetsRouteWithChildren
+  '/_authenticated/clinica/': typeof AuthenticatedClinicaIndexRoute
   '/_authenticated/tutor/': typeof AuthenticatedTutorIndexRoute
   '/_authenticated/tutor/pets/$petId': typeof AuthenticatedTutorPetsPetIdRoute
   '/_authenticated/tutor/pets/novo': typeof AuthenticatedTutorPetsNovoRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/p/$token'
     | '/tutor/agendar'
     | '/tutor/pets'
+    | '/clinica/'
     | '/tutor/'
     | '/tutor/pets/$petId'
     | '/tutor/pets/novo'
@@ -155,10 +165,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/sitemap.xml'
     | '/admin'
-    | '/clinica'
     | '/p/$token'
     | '/tutor/agendar'
     | '/tutor/pets'
+    | '/clinica'
     | '/tutor'
     | '/tutor/pets/$petId'
     | '/tutor/pets/novo'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/p/$token'
     | '/_authenticated/tutor/agendar'
     | '/_authenticated/tutor/pets'
+    | '/_authenticated/clinica/'
     | '/_authenticated/tutor/'
     | '/_authenticated/tutor/pets/$petId'
     | '/_authenticated/tutor/pets/novo'
@@ -252,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTutorIndexRouteImport
       parentRoute: typeof AuthenticatedTutorRoute
     }
+    '/_authenticated/clinica/': {
+      id: '/_authenticated/clinica/'
+      path: '/'
+      fullPath: '/clinica/'
+      preLoaderRoute: typeof AuthenticatedClinicaIndexRouteImport
+      parentRoute: typeof AuthenticatedClinicaRoute
+    }
     '/_authenticated/tutor/pets': {
       id: '/_authenticated/tutor/pets'
       path: '/pets'
@@ -282,6 +300,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedClinicaRouteChildren {
+  AuthenticatedClinicaIndexRoute: typeof AuthenticatedClinicaIndexRoute
+}
+
+const AuthenticatedClinicaRouteChildren: AuthenticatedClinicaRouteChildren = {
+  AuthenticatedClinicaIndexRoute: AuthenticatedClinicaIndexRoute,
+}
+
+const AuthenticatedClinicaRouteWithChildren =
+  AuthenticatedClinicaRoute._addFileChildren(AuthenticatedClinicaRouteChildren)
 
 interface AuthenticatedTutorPetsRouteChildren {
   AuthenticatedTutorPetsPetIdRoute: typeof AuthenticatedTutorPetsPetIdRoute
@@ -316,13 +345,13 @@ const AuthenticatedTutorRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
-  AuthenticatedClinicaRoute: typeof AuthenticatedClinicaRoute
+  AuthenticatedClinicaRoute: typeof AuthenticatedClinicaRouteWithChildren
   AuthenticatedTutorRoute: typeof AuthenticatedTutorRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
-  AuthenticatedClinicaRoute: AuthenticatedClinicaRoute,
+  AuthenticatedClinicaRoute: AuthenticatedClinicaRouteWithChildren,
   AuthenticatedTutorRoute: AuthenticatedTutorRouteWithChildren,
 }
 
